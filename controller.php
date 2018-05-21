@@ -111,12 +111,12 @@
 
 	else if(isset($_POST['upWar'])) {
 		$camp = array("start", "finish", "challenger", "challenged", "winner");
-//		for($i=0; $i<count($camp); $i++) {
-//			if(!isset($_POST[$camp[$i]])) {
-//				echo "bad parameter";
-//				return;
-//			}
-//		}
+		for($i=0; $i<count($camp); $i++) {
+			if(!isset($_POST[$camp[$i]])) {
+				echo "bad parameter";
+				return;
+			}
+		}
 
 		$war = new war();
 		$war->setId(intval($_POST['upWar']));

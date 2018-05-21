@@ -39,8 +39,6 @@
 							cols += "<td>"+data[i].data_inicio+"</td>";
 							cols += "<td>"+data[i].data_fim+"</td>";
 							cols += "<td>"+data[i].nomeV+"</td>";
-							cols += "<td><button class ='btn btn-primary mr-2' data-toggle='modal' data-target='#upGuerra' href='#' data-whatever='"+ data[i].id +"'>Editar</button>";
-							cols += "<button class ='btn btn-danger ' data-toggle='modal' data-target='#delGuerra' href='#' data-whatever='"+ data[i].id +"'>Deletar</button></td>";
 							row.append(cols);
 							$("#tableWar").append(row);
 						}
@@ -64,28 +62,6 @@
 					});
 				}
 
-
-				$('#newGuerra').on('show.bs.modal', function (event) {
-					loadOptions();
-				});				
-
-
-				$('#upGuerra').on('show.bs.modal', function (event) {
-					let button = $(event.relatedTarget);
-					let id = button.data('whatever');
-					$("#upWar").val(id);
-					loadOptions();
-				});				
-				
-
-
-				$('#delGuerra').on('show.bs.modal', function (event) {
-					let button = $(event.relatedTarget);
-					let id = button.data('whatever');
-					$("#delWar").val(id);
-				});				
-				
-
 				$("#filter").submit(function () {
 					let dados = $(this).serialize();
 					$.ajax({
@@ -103,8 +79,6 @@
 								cols += "<td>"+data[i].data_inicio+"</td>";
 								cols += "<td>"+data[i].data_fim+"</td>";
 								cols += "<td>"+data[i].nomeV+"</td>";
-								cols += "<td><button class ='btn btn-primary mr-2' data-toggle='modal' data-target='#upGuerra' href='#' data-whatever='"+ data[i].id +"'>Editar</button>";
-								cols += "<button class ='btn btn-danger ' data-toggle='modal' data-target='#delGuerra' href='#' data-whatever='"+ data[i].id +"'>Deletar</button></td>";
 								row.append(cols);
 								$("#tableWar").append(row);
 						}
@@ -154,7 +128,6 @@
 				<th scope="col">Ínicio</th>
 				<th scope="col">Fim</th>
 				<th scope="col">Vencedor</th>
-				<th scope="col">Ações</th>
 
     			</tr>
   		</thead>
@@ -166,126 +139,7 @@
 	<button type="button" class="btn btn-success mx-auto" data-toggle="modal" data-target="#newGuerra">Adicionar guerra</button>
 </div>
 
-	<div class="modal fade" id="newGuerra" tabindex="-1" role="dialog" aria-abelledby="exampleModalCenterTitle" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLongTitle">Adicionar guerra</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-        			</button>
-      			</div>
-      			<div class="modal-body">
-				<form  class = "form">
-					<input type = "hidden" name = "newWar">
-					<div class="form-group">
-						<label for="name">Familia desafiadora</label>
-						<select class="form-control familias" name="challenger" required>
-  							<option>-----</option>
-						</select>
 
-
-					</div>
-					<div class="form-group">
-						<label for="members">Familia Desafiada</label>
-						<select class="form-control familias" name="challenged" required>
-  							<option>-----</option>
-						</select>
-					</div>
-
-					<div class="form-group">
-						<label for="name">Familia vencedora</label>
-						<select class="form-control familias" name="winner" required>
-  							<option>-----</option>
-						</select>
-					</div>
-
-				<div class="form-group">
-					<label for="start">Data inicial</label>
-    					<input type="date" class="form-control" name="start">
- 				</div>
-				<div class="form-group">
-					<label for="start">Data Final</label>
-				    	<input type="date" class="form-control" name="finish">
-				</div>
-				
-				<button type="submit" class="btn btn-primary mt-2">Submit</button>
-				</form>
-      			</div>
-		</div>
-		</div>
-	</div>
-
-	<div class="modal fade" id="upGuerra" tabindex="-1" role="dialog" aria-abelledby="exampleModalCenterTitle" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLongTitle">Editar familia</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-        			</button>
-      			</div>
-      			<div class="modal-body">
-				<form  class = "form">
-					<input type = "hidden" id = "upWar" name = "upWar" value = "">
-					<div class="form-group">
-					<div class="form-group">
-						<label for="name">Familia desafiadora</label>
-						<select class="form-control familias" name="challenger" required>
-  							<option>-----</option>
-						</select>
-
-
-					</div>
-					<div class="form-group">
-						<label for="members">Familia Desafiada</label>
-						<select class="form-control familias" name="challenged" required>
-  							<option>-----</option>
-						</select>
-					</div>
-
-					<div class="form-group">
-						<label for="name">Familia vencedora</label>
-						<select class="form-control familias" name="winner" required>
-  							<option>-----</option>
-						</select>
-					</div>
-
-				<div class="form-group">
-					<label for="start">Data inicial</label>
-    					<input type="date" class="form-control" name="start">
- 				</div>
-				<div class="form-group">
-					<label for="start">Data Final</label>
-				    	<input type="date" class="form-control" name="finish">
-
-				
-				<button type="submit" class="btn btn-primary mt-2">Submit</button>
-				</form>
-      			</div>
-		</div>
-		</div>
-	</div>
-
-	<div class="modal fade" id="delGuerra" tabindex="-1" role="dialog" aria-abelledby="exampleModalCenterTitle" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLongTitle">Deletar Guerra</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-        			</button>
-      			</div>
-      			<div class="modal-body">
-				<form  class = "form">
-					<input type = "hidden" id = "delWar" name = "delWar" value = "">
-					<p>Deseja deletar esta família?</p>
-					<button type="submit" class="btn btn-primary">Submit</button>
-				</form>
-      			</div>
-		</div>
-		</div>
-	</div>
 
 	</body>
 </html>

@@ -4,9 +4,9 @@
 	// Teste fácilconsulta
 	// Controlador do teste
 
-	require ("Database.php");
-	require("War.php");
-	require ("Family.php");
+	require ("model/Database.php");
+	require("model/War.php");
+	require ("model/Family.php");
 			// Controller família
 	
 	if(isset($_POST['newFamily'])) {

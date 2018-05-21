@@ -1,0 +1,293 @@
+<html>
+	<head>
+		<meta charset = "utf-8">
+		<script
+			  src="https://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			  crossorigin="anonymous">
+		</script>
+
+		<script 
+			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" 			integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" 				crossorigin="anonymous">
+		</script>
+
+		<script
+			src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" 
+			integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" 
+			crossorigin="anonymous">
+		</script>
+
+		<link 
+			rel="stylesheet" 
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" 			integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" 				crossorigin="anonymous">
+
+		<script>
+			$(document).ready(function() {
+				function load() {
+					$.ajax({
+					url: "controller.php",
+					data: {"listWar":""},
+					dataType: "json",
+					type: "POST",
+					success: function (data) {
+						$("td").remove();
+						for(i=0; i<data.length; i++) {
+							row = $("<tr>");
+							cols = "";
+							cols += "<td>"+data[i].nomeDr+"</td>";
+							cols += "<td>"+data[i].nomeDd+"</td>";
+							cols += "<td>"+data[i].data_inicio+"</td>";
+							cols += "<td>"+data[i].data_fim+"</td>";
+							cols += "<td>"+data[i].nomeV+"</td>";
+							cols += "<td><button class ='btn btn-primary mr-2' data-toggle='modal' data-target='#upGuerra' href='#' data-whatever='"+ data[i].id +"'>Editar</button>";
+							cols += "<button class ='btn btn-danger ' data-toggle='modal' data-target='#delGuerra' href='#' data-whatever='"+ data[i].id +"'>Deletar</button></td>";
+							row.append(cols);
+							$("#tableWar").append(row);
+						}
+					}
+					});
+				}
+
+				function loadOptions() {
+					$.ajax({
+					url: "controller.php",
+					data: {"listFamily":""},
+					dataType: "json",
+					type: "POST",
+					success: function (data) {
+						opt = "";
+						for(i=0; i<data.length; i++) {
+							opt+="<option value ='"+data[i].id+"'>"+data[i].nome+"</option>"
+							$(".familias").append(opt);
+						}
+					}
+					});
+				}
+
+
+				$('#newGuerra').on('show.bs.modal', function (event) {
+					loadOptions();
+				});				
+
+
+				$('#upGuerra').on('show.bs.modal', function (event) {
+					let button = $(event.relatedTarget);
+					let id = button.data('whatever');
+					$("#upWar").val(id);
+					loadOptions();
+				});				
+				
+
+
+				$('#delGuerra').on('show.bs.modal', function (event) {
+					let button = $(event.relatedTarget);
+					let id = button.data('whatever');
+					$("#delWar").val(id);
+				});				
+				
+
+				$("#filter").submit(function () {
+					let dados = $(this).serialize();
+					$.ajax({
+						url: "controller.php",
+						data: dados,
+						dataType: "json",
+						type: "POST",
+						success: function (data) {
+							$("td").remove();
+							for(i=0; i<data.length; i++) {
+								row = $("<tr>");
+								cols = "";
+								cols += "<td>"+data[i].nomeDr+"</td>";
+								cols += "<td>"+data[i].nomeDd+"</td>";
+								cols += "<td>"+data[i].data_inicio+"</td>";
+								cols += "<td>"+data[i].data_fim+"</td>";
+								cols += "<td>"+data[i].nomeV+"</td>";
+								cols += "<td><button class ='btn btn-primary mr-2' data-toggle='modal' data-target='#upGuerra' href='#' data-whatever='"+ data[i].id +"'>Editar</button>";
+								cols += "<button class ='btn btn-danger ' data-toggle='modal' data-target='#delGuerra' href='#' data-whatever='"+ data[i].id +"'>Deletar</button></td>";
+								row.append(cols);
+								$("#tableWar").append(row);
+						}
+						}					});
+					return false;
+				});
+
+
+				$(".form").submit(function () {
+					let dados = $(this).serialize();
+					$.ajax({
+						url: "controller.php",
+						data: dados,
+						dataType: "json",
+						type: "POST",
+						success: function (data) {
+							console.log(data);
+							load();
+						}
+					});
+					$(this).reset();
+					return false;
+				});
+				load();
+			});
+		</script>
+	</head>
+
+	<body>
+		<div class = "row mx-auto">
+			<form class="form-inline mx-auto" id = "filter">
+				<input type="hidden" name = "filter" value="">
+				<div class="form-group mb-2">
+    					<input type="date" class="form-control-plaintext" name="start" placeholder = "Data inicial">
+ 				</div>
+				<div class="form-group mx-sm-3 mb-2">
+				    	<input type="date" class="form-control-plaintext" name="finish" placeholder="Data final">
+				</div>
+				    	<button type="submit" class="btn btn-primary btn-sm mb-2">Filtrar</button>
+			</form>
+		</div>
+		<table id = "tableWar" class="table table-striped">
+		<thead>
+			<tr>
+				<th scope="col">Família desafiadora</th>
+				<th scope="col">Família desafiada</th>
+				<th scope="col">Ínicio</th>
+				<th scope="col">Fim</th>
+				<th scope="col">Vencedor</th>
+				<th scope="col">Ações</th>
+
+    			</tr>
+  		</thead>
+  		<tbody>
+    
+		</tbody>
+</table>
+<div class = "row">
+	<button type="button" class="btn btn-success mx-auto" data-toggle="modal" data-target="#newGuerra">Adicionar guerra</button>
+</div>
+
+	<div class="modal fade" id="newGuerra" tabindex="-1" role="dialog" aria-abelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Adicionar guerra</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+        			</button>
+      			</div>
+      			<div class="modal-body">
+				<form  class = "form">
+					<input type = "hidden" name = "newWar">
+					<div class="form-group">
+						<label for="name">Familia desafiadora</label>
+						<select class="form-control familias" name="challenger" required>
+  							<option>-----</option>
+						</select>
+
+
+					</div>
+					<div class="form-group">
+						<label for="members">Familia Desafiada</label>
+						<select class="form-control familias" name="challenged" required>
+  							<option>-----</option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="name">Familia vencedora</label>
+						<select class="form-control familias" name="winner" required>
+  							<option>-----</option>
+						</select>
+					</div>
+
+				<div class="form-group">
+					<label for="start">Data inicial</label>
+    					<input type="date" class="form-control" name="start">
+ 				</div>
+				<div class="form-group">
+					<label for="start">Data Final</label>
+				    	<input type="date" class="form-control" name="finish">
+				</div>
+				
+				<button type="submit" class="btn btn-primary mt-2">Submit</button>
+				</form>
+      			</div>
+		</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="upGuerra" tabindex="-1" role="dialog" aria-abelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Editar familia</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+        			</button>
+      			</div>
+      			<div class="modal-body">
+				<form  class = "form">
+					<input type = "hidden" id = "upWar" name = "upWar" value = "">
+					<div class="form-group">
+					<div class="form-group">
+						<label for="name">Familia desafiadora</label>
+						<select class="form-control familias" name="challenger" required>
+  							<option>-----</option>
+						</select>
+
+
+					</div>
+					<div class="form-group">
+						<label for="members">Familia Desafiada</label>
+						<select class="form-control familias" name="challenged" required>
+  							<option>-----</option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="name">Familia vencedora</label>
+						<select class="form-control familias" name="winner" required>
+  							<option>-----</option>
+						</select>
+					</div>
+
+				<div class="form-group">
+					<label for="start">Data inicial</label>
+    					<input type="date" class="form-control" name="start">
+ 				</div>
+				<div class="form-group">
+					<label for="start">Data Final</label>
+				    	<input type="date" class="form-control" name="finish">
+
+				
+				<button type="submit" class="btn btn-primary mt-2">Submit</button>
+				</form>
+      			</div>
+		</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="delGuerra" tabindex="-1" role="dialog" aria-abelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Deletar Guerra</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+        			</button>
+      			</div>
+      			<div class="modal-body">
+				<form  class = "form">
+					<input type = "hidden" id = "delWar" name = "delWar" value = "">
+					<p>Deseja deletar esta família?</p>
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</form>
+      			</div>
+		</div>
+		</div>
+	</div>
+
+	</body>
+</html>
+
+
